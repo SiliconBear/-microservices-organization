@@ -1,8 +1,9 @@
-import { Controller, Get, Inject, Logger } from '@nestjs/common';
+import { Controller, Get, Inject, Logger, UseGuards, Request } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { Observable } from 'rxjs';
 import { Microservices } from './app.constants';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class AppController {
@@ -18,8 +19,10 @@ export class AppController {
     return this.appService.root();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('talk')
-  auth(): Observable<number> {
+  auth(@Request() req): Observable<number> {
+    Logger.log(req.user)
     const pattern = { cmd: 'sum' };
     const payload = [1, 2, 3];
     this.authClient.connect()

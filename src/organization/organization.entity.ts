@@ -1,5 +1,5 @@
 import { Entity, Column, ObjectIdColumn, CreateDateColumn, Unique, OneToMany, ObjectID, UpdateDateColumn } from 'typeorm';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 import { Member } from 'src/member/member.entity';
 
 @Entity()
@@ -10,12 +10,12 @@ export class Organization {
   _id: ObjectID;
 
   @Column()
-  @IsEmail()
+  @IsNotEmpty()
   name: string;
 
   @ObjectIdColumn()
   @IsNotEmpty()
-  createdBy: ObjectID;
+  createdBy: Member;
 
   @OneToMany(type => Member, member=>member.organization)
   members: Member[];
